@@ -2,6 +2,7 @@
 import './App.css';
 import {Grid} from '@material-ui/core';
 import Search from './components/Search';
+
 function App() {
   return (
     <Grid className="App" 

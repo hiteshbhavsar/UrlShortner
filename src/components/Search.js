@@ -5,18 +5,29 @@ import {Links} from './Search.css'
 import {BsClipboardData} from 'react-icons/bs'
 import ReactTooltip from 'react-tooltip';
 
+//Used for text validation of the text box
+const HTTP_URL_VALIDATOR_REGEX = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+
 const Search = () => {
     const [link,setlink]=useState('');
     const [short,setShort]=useState('');
     const [isLoading, setIsLoading]=useState(false);
     const [isSearchBoxEnabled,setSearchBox]=useState(true);
     const handleSubmit = (e)=>{
-        e.preventDefault();
-        console.log(link);
-        getLink();
-        setlink('');
-        setIsLoading(!isLoading);
-        setSearchBox(true);
+        if(validateURL(link))
+        {
+            e.preventDefault();
+            console.log(link);
+            getLink();
+            setlink('');
+            setIsLoading(!isLoading);
+            setSearchBox(true);
+        }
+        else{
+            alert('Please enter a valid URL');
+            setlink('');
+        }
+        
         
     }
 
@@ -25,6 +36,11 @@ const Search = () => {
         console.log(document.getElementById('clip-icon').innerText);
         window.open(document.getElementById('clip-icon').innerText);
     }
+
+    const validateURL=(string)=>{
+        return string.match(HTTP_URL_VALIDATOR_REGEX);
+    }
+
     const copytoclipboard=(e)=>
     {
         e.preventDefault();
@@ -69,7 +85,7 @@ const Search = () => {
             {isLoading && <LinearProgress/>}
             </form>
             {short && <div>Short Link:  &nbsp; &nbsp;
-                <a id='clip-icon' target="_blank" className="Links" href={short} onClick={(e)=>handleLinkClick(e)}>{short}</a>
+                <a id='clip-icon' target="_blank"    className="Links" href={short} onClick={(e)=>handleLinkClick(e)}>{short}</a>
                 <BsClipboardData style={{marginLeft:'20px'}} color='#3f51b5' 
                 onClick={(e)=>copytoclipboard(e)} data-tip='Copy to Clipboard'></BsClipboardData>
             
