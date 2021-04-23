@@ -13,11 +13,14 @@ const Search = () => {
     const [short,setShort]=useState('');
     const [isLoading, setIsLoading]=useState(false);
     const [isSearchBoxEnabled,setSearchBox]=useState(true);
+    const [shortlink,setshortlink]=useState('');
     const handleSubmit = (e)=>{
         if(validateURL(link))
         {
             e.preventDefault();
             console.log(link);
+            
+            
             getLink();
             setlink('');
             setIsLoading(!isLoading);
@@ -30,6 +33,7 @@ const Search = () => {
         
         
     }
+
 
     const handleLinkClick=(e)=>{
         e.preventDefault();
@@ -49,15 +53,17 @@ const Search = () => {
         var element=document.getElementById('clip-icon');
         console.log(element.innerText);
         navigator.clipboard.writeText(element.innerText);
+        
     }
     const getLink = async () =>{
         await shrtcode
         .get(`shorten?url=${link}`)
         .then((response) =>{
             //console.log(response);
-            setShort(response.data.result.short_link);
+            setShort("https://"+response.data.result.short_link);
             setIsLoading(false);
             setSearchBox(false);
+            
         })
         .catch((error) =>{
             console.error(error);
@@ -88,7 +94,6 @@ const Search = () => {
                 <a id='clip-icon' target="_blank"    className="Links" href={short} onClick={(e)=>handleLinkClick(e)}>{short}</a>
                 <BsClipboardData style={{marginLeft:'20px'}} color='#3f51b5' 
                 onClick={(e)=>copytoclipboard(e)} data-tip='Copy to Clipboard'></BsClipboardData>
-            
             </div>}
         </div>
     )   
